@@ -1,35 +1,17 @@
 package envstr
 
 import (
-	"fmt"
 	"os"
+	"regexp"
 	"strings"
 )
 
 func Apply(s string) string {
-	var found bool
-	for {
-		s, found = ApplyOnce(s)
-		if !found {
-			return s
-		}
-	}
-}
-
-func ApplyOnce(s string) (string, bool) {
-	idxS := strings.Index(s, "${")
-	if idxS == -1 {
-		return s, false
-	}
-	// 開始位置以降に限定
-	idxEFromS := strings.Index(s[idxS+len("${"):], "}")
-	if idxEFromS == -1 {
-		return s, false
-	}
-	// 開始位置以降の相対距離に、開始位置の距離を補正
-	idxE := idxS + idxEFromS + len("}")
-	envK := s[idxS+len("${") : idxE+len("}")]
-	envV := os.Getenv(envK)
-	fmt.Println(envK, envV) // TODO
-	return s[:idxS] + envV + s[idxE+len("}")+1:], true
+	re, _ := regexp.Compile(`\${[A-Z][a-zA-Z0-9_]*}`)
+	result := re.ReplaceAllStringFunc(s, func(match string) string {
+		k := strings.TrimSpace(strings.TrimRight(strings.TrimLeft(match, "${"), "$}"))
+		v := os.Getenv(k)
+		return v
+	})
+	return result
 }
