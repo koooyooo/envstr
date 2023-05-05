@@ -1,5 +1,5 @@
 
-![logo](./envstr.jpg)
+![logo](./logo.jpg)
 
 # envstr
 [![test](https://github.com/koooyooo/envstr/actions/workflows/test.yaml/badge.svg)](https://github.com/koooyooo/envstr/actions/workflows/test.yaml)
