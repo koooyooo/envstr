@@ -57,8 +57,9 @@ func TestApply(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			test.setUp(t)
-			out := Apply(test.in)
+			out, err := Apply(test.in)
 			assert.Equal(t, test.out, out)
+			assert.NoError(t, err)
 		})
 	}
 }
